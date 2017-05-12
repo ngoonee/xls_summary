@@ -51,6 +51,9 @@ if __name__ == '__main__':
             row = identifier['row'] - 1
             val = sheet.cell_value(row, col)
             summary_row[summary_col] = val
-        print(summary_row)
         # Create new row in summary file (check for old?)
+        row = ws_s.max_row + 1
+        for col, val in summary_row.items():
+            coordinate = col + str(row)
+            ws_s.cell(coordinate=coordinate, value=val)
     wb_s.save(filename=os.path.join(my_dir, summary_name))
