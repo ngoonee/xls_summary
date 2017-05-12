@@ -1,5 +1,6 @@
 import os
 from openpyxl import load_workbook
+from openpyxl.utils import column_index_from_string
 from xlrd import open_workbook
 
 if __name__ == '__main__':
@@ -36,6 +37,14 @@ if __name__ == '__main__':
                                                  'row': c.row}
     for f in cur_filelist:
         # Open file
-        # Extract values at locations indicated in template file
+        wb = open_workbook(os.path.join(my_dir, f))
+        summary_row = {}
+        for summary_col, identifier in locations.items():
+            # Extract values at locations indicated in template file
+            sheet = wb.sheet_by_name(identifier['sheet_name'])
+            col = column_index_from_string(identifier['col']) - 1
+            row = identifier['row'] - 1
+            val = sheet.cell_value(row, col)
+            summary_row[summary_col] = val
+        print(summary_row)
         # Create new row in summary file (check for old?)
-        pass
