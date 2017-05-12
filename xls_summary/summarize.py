@@ -1,4 +1,5 @@
 import os
+from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import column_index_from_string
 from xlrd import open_workbook
@@ -19,9 +20,13 @@ if __name__ == '__main__':
     # one and append to it
     if summary_name in cur_filelist:
         # Load it up, then remove from cur_filelist
+        wb_s = load_workbook(os.path.join(my_dir, summary_name))
+        ws_s = wb_s.active
         cur_filelist.remove(summary_name)
     else:
-        pass
+        wb_s = Workbook()
+        ws_s = wb_s.active
+        ws_s.title = "Summary of data"
     # Scan template file to find indicators
     wb_t = load_workbook(os.path.join(my_dir, template_name))
     locations = {}
@@ -48,3 +53,4 @@ if __name__ == '__main__':
             summary_row[summary_col] = val
         print(summary_row)
         # Create new row in summary file (check for old?)
+    wb_s.save(filename=os.path.join(my_dir, summary_name))
