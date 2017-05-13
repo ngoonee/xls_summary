@@ -4,9 +4,8 @@ from openpyxl import load_workbook
 from openpyxl.utils import column_index_from_string
 from xlrd import open_workbook
 
-if __name__ == '__main__':
+def do_a_summary(my_dir):
     # List all excel files in current folder
-    my_dir = '.'
     template_name = 'summary_template.xlsx'
     summary_name = 'summary.xlsx'
     cur_filelist = [f for f in os.listdir(my_dir)

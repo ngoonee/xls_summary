@@ -15,7 +15,7 @@ setuptools.setup(
 
     install_requires=[
         'xlrd>=1.0.0',
-        'openpyxl',
+        'openpyxl>=2.4.7',
     ],
 
     classifiers=[
