@@ -10,11 +10,13 @@ class Application(tk.Frame):
         self.dir = None
 
     def createWidgets(self):
-        self.feedback = tk.Label(self)
-        self.feedback["text"] = ("Welcome to Excel Summary\n"
-                                 "Please choose a directory.")
+        self.labelframe = tk.LabelFrame(self, text="Welcome to Excel Summary")
+        self.labelframe.pack(side="top")
+        self.feedback = tk.Label(self.labelframe, wraplength=600,
+                                 justify='center')
+        self.feedback["text"] = ("Please choose a directory.")
         self.feedback.pack(side="top")
-        self.choose_dir = tk.Button(self,
+        self.choose_dir = tk.Button(self.labelframe,
                                     text="Choose Directory",
                                     command=self.choose_directory,
                                     ).pack(side="top")
@@ -28,11 +30,8 @@ class Application(tk.Frame):
         options['parent'] = self
         options['title'] = 'Choose the directory'
         self.dir = filedialog.askdirectory(**options)
-        do_a_summary(self.dir)
-        self.feedback["text"] = ("Successfully summarized.\n"
-                                 "Please choose another directory\n"
-                                 "if you wish.")
-
+        feedback = do_a_summary(self.dir)
+        self.feedback["text"] = feedback
 
 if __name__ == '__main__':
     root = tk.Tk()
