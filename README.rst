@@ -23,8 +23,8 @@ pyinstaller, and xlrd requires the --hidden-import option. The command is:-
 pyinstaller.exe --additional-hooks-dir=. --hidden-import=xlrd --onefile app.py
 
 Can be done with wine as well, of on a Linux only system trying to generate
-the exe. As of today (14 May 2017) you'll need wine-staging and python 3.5.x
-(the 3.6 series does not work with wine). Install pyinstaller in wine, then
+the exe. As of today (19 Oct 2017) you'll need to use python 3.4.x
+(due to a bug in pyinstaller for 3.5 and up). Install pyinstaller in wine, then
 generate the exe using the above command.
 
 Installation

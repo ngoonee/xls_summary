@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['app.py'],
-             pathex=['Z:\\home\\data\\Coding\\python\\xls_summary'],
+             pathex=['Z:\\home\\ngoonee\\Files\\Code\\python\\xls_summary'],
              binaries=[],
              datas=[],
              hiddenimports=['xlrd'],
@@ -25,4 +25,5 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
+          runtime_tmpdir=None,
           console=True )
