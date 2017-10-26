@@ -3,6 +3,7 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import column_index_from_string
 from xlrd import open_workbook
+import numbers
 
 def do_a_summary(my_dir):
     # List all excel files in current folder
@@ -74,8 +75,24 @@ def do_a_summary(my_dir):
             summary_list.append(summary_row)
         except Exception as e:
             error_list.append((wb_path, e))
+    def filter_part_one(summary_row):
+        count_of_zeros = 0
+        for col, val in summary_row.items():
+            if val == 0:
+                count_of_zeros += 1
+        if count_of_zeros > 12:
+            retval = {}
+            for col, val in summary_row.items():
+                if isinstance(val, numbers.Number) and val < 100:
+                    retval[col] = 'P'
+                else:
+                    retval[col] = val
+        else:
+            retval = summary_row
+        return retval
+    filtered_list = [filter_part_one(r) for r in summary_list]
     # Create sorted list based on first column
-    sorted_list = sorted(summary_list, key=lambda r: r['A'])
+    sorted_list = sorted(filtered_list, key=lambda r: r['A'])
     # Actually write the rows to the openpyxl object
     for summary_row in sorted_list:
         # Create new row in summary file (check for old?)
