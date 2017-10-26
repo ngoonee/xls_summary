@@ -57,6 +57,7 @@ def do_a_summary(my_dir):
         ws_s.title = "Summary of data"
     # Process all other excel files, log all errors appropriately
     error_list = []
+    summary_list = []
     for f in cur_filelist:
         wb_path = os.path.join(my_dir, f)
         try:
@@ -70,13 +71,17 @@ def do_a_summary(my_dir):
                 row = identifier['row'] - 1
                 val = sheet.cell_value(row, col)
                 summary_row[summary_col] = val
-            # Create new row in summary file (check for old?)
-            row = ws_s.max_row + 1
-            for col, val in summary_row.items():
-                coordinate = col + str(row)
-                ws_s.cell(coordinate=coordinate, value=val)
+            summary_list.append(summary_row)
         except Exception as e:
             error_list.append((wb_path, e))
+    # Actually write the rows to the openpyxl object
+    for summary_row in summary_list:
+        # Create new row in summary file (check for old?)
+        row = ws_s.max_row + 1
+        for col, val in summary_row.items():
+            coordinate = col + str(row)
+            ws_s.cell(coordinate=coordinate, value=val)
+    # Save the file
     try:
         wb_s.save(filename=os.path.join(my_dir, summary_name))
     except Exception as e:
