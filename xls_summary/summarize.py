@@ -74,8 +74,10 @@ def do_a_summary(my_dir):
             summary_list.append(summary_row)
         except Exception as e:
             error_list.append((wb_path, e))
+    # Create sorted list based on first column
+    sorted_list = sorted(summary_list, key=lambda r: r['A'])
     # Actually write the rows to the openpyxl object
-    for summary_row in summary_list:
+    for summary_row in sorted_list:
         # Create new row in summary file (check for old?)
         row = ws_s.max_row + 1
         for col, val in summary_row.items():
