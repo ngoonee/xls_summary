@@ -25,16 +25,16 @@ def do_a_summary(my_dir):
         return ("Unable to load template file {}, the following error message "
                 "was returned:-\n{}").format(wb_t_path, str(e))
     locations = {}
-    for sheet_name in wb_t.get_sheet_names():
-        sheet = wb_t.get_sheet_by_name(sheet_name)
-        cells = sheet.get_cell_collection()
-        for c in cells:
-            if isinstance(c.value, str):
-                if c.value.startswith('::') and c.value.endswith('::'):
-                    row_identifier = c.value[2:-2]
-                    locations[row_identifier] = {'sheet_name': sheet_name,
-                                                 'col': c.column,
-                                                 'row': c.row}
+    for sheet_name in wb_t.sheetnames:
+        sheet = wb_t[sheet_name]
+        for row in sheet:
+            for c in row:
+                if isinstance(c.value, str):
+                    if c.value.startswith('::') and c.value.endswith('::'):
+                        row_identifier = c.value[2:-2]
+                        locations[row_identifier] = {'sheet_name': sheet_name,
+                                                    'col': c.column,
+                                                    'row': c.row}
     if len(locations) == 0:
         return ("No markers found in template file {}, please make sure "
                 "it contains at least one cell with the value '::?::' "
@@ -68,7 +68,7 @@ def do_a_summary(my_dir):
             for summary_col, identifier in locations.items():
                 # Extract values at locations indicated in template file
                 sheet = wb.sheet_by_name(identifier['sheet_name'])
-                col = column_index_from_string(identifier['col']) - 1
+                col = identifier['col'] - 1
                 row = identifier['row'] - 1
                 val = sheet.cell_value(row, col)
                 summary_row[summary_col] = val
@@ -99,7 +99,7 @@ def do_a_summary(my_dir):
         row = ws_s.max_row + 1
         for col, val in summary_row.items():
             coordinate = col + str(row)
-            ws_s.cell(coordinate=coordinate, value=val)
+            ws_s.cell(column=column_index_from_string(col), row=row, value=val)
     # Save the file
     try:
         wb_s.save(filename=os.path.join(my_dir, summary_name))
