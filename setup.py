@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="xls_summary",
-    version="0.1.0",
+    version="0.1.3",
     url="https://github.com/ngoonee/xls_summary",
 
     author="Ng Oon-Ee",
@@ -14,7 +14,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
 
     install_requires=[
-        'xlrd>=1.0.0',
         'openpyxl>=2.4.7',
     ],
 

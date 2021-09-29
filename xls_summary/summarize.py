@@ -2,10 +2,9 @@ import os
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import column_index_from_string
-from xlrd import open_workbook
 import numbers
 
-def do_a_summary(my_dir):
+def do_a_summary(my_dir, multiplier=1.0):
     # List all excel files in current folder
     template_name = 'summary_template.xlsx'
     summary_name = 'summary.xlsx'
@@ -63,15 +62,18 @@ def do_a_summary(my_dir):
         wb_path = os.path.join(my_dir, f)
         try:
             # Open file
-            wb = open_workbook(wb_path)
+            wb = load_workbook(wb_path, data_only=True)
             summary_row = {}
             for summary_col, identifier in locations.items():
                 # Extract values at locations indicated in template file
-                sheet = wb.sheet_by_name(identifier['sheet_name'])
-                col = identifier['col'] - 1
-                row = identifier['row'] - 1
-                val = sheet.cell_value(row, col)
-                summary_row[summary_col] = val
+                sheet = wb[identifier['sheet_name']]
+                col = identifier['col']
+                row = identifier['row']
+                val = sheet.cell(row, col).value
+                if isinstance(val, numbers.Number) and val < 100*multiplier:
+                    summary_row[summary_col] = val*multiplier
+                else:
+                    summary_row[summary_col] = val
             summary_list.append(summary_row)
         except Exception as e:
             error_list.append((wb_path, e))
@@ -83,7 +85,7 @@ def do_a_summary(my_dir):
         if count_of_zeros > 12:
             retval = {}
             for col, val in summary_row.items():
-                if isinstance(val, numbers.Number) and val < 100:
+                if isinstance(val, numbers.Number) and val < 100*multiplier:
                     retval[col] = 'P'
                 else:
                     retval[col] = val
