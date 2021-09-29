@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['app.py'],
-             pathex=['Z:\\home\\ngoonee\\Files\\Code\\python\\xls_summary'],
+             pathex=['Z:\\Files\\Code\\python\\xls_summary'],
              binaries=[],
              datas=[],
              hiddenimports=[],

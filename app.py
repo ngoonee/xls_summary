@@ -12,13 +12,20 @@ class Application(tk.Frame):
     def createWidgets(self):
         self.labelframe = tk.LabelFrame(self, text="Welcome to Excel Summary")
         self.labelframe.pack(side="top")
-        self.instruction = tk.Label(self.labelframe, wraplength=600,
-                                    justify='center')
-        self.instruction["text"] = ("Please enter the multiplier to be used.")
-        self.instruction.pack(side="top")
+        self.multiplier_instruction = tk.Label(self.labelframe, wraplength=600,
+                                               justify='center')
+        self.multiplier_instruction["text"] = ("Please enter the multiplier to be used.")
+        self.multiplier_instruction.pack(side="top")
         self.multiplier = tk.Entry(self.labelframe, justify='center')
         self.multiplier.insert(0, 100)
         self.multiplier.pack(side="top")
+        self.sorter_instruction = tk.Label(self.labelframe, wraplength=600,
+                                           justify='center')
+        self.sorter_instruction["text"] = ("Please choose which column to sort by.")
+        self.sorter_instruction.pack(side="top")
+        self.sorter = tk.Entry(self.labelframe, justify='center')
+        self.sorter.insert(0, 'A')
+        self.sorter.pack(side="top")
         self.feedback = tk.Label(self.labelframe, wraplength=600,
                                  justify='center')
         self.feedback["text"] = ("Please choose a directory, then wait for processing to be done.")
@@ -39,13 +46,14 @@ class Application(tk.Frame):
         multiplier = self.multiplier.get()
         try:
             multiplier = int(multiplier)
-            self.dir = filedialog.askdirectory(**options)
-            #self.feedback["text"] = 'Doing the summary now, please wait...'
-            feedback = do_a_summary(self.dir, multiplier=multiplier)
-            self.feedback["text"] = feedback
         except Exception as e:
             feedback = "Please enter a number for the multiplier."
             self.feedback["text"] = feedback
+        sorter = self.sorter.get()
+        self.dir = filedialog.askdirectory(**options)
+        #self.feedback["text"] = 'Doing the summary now, please wait...'
+        feedback = do_a_summary(self.dir, multiplier=multiplier, sorter=sorter)
+        self.feedback["text"] = feedback
 
 if __name__ == '__main__':
     root = tk.Tk()

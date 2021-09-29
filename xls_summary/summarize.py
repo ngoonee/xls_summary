@@ -4,7 +4,7 @@ from openpyxl import load_workbook
 from openpyxl.utils import column_index_from_string
 import numbers
 
-def do_a_summary(my_dir, multiplier=1.0):
+def do_a_summary(my_dir, multiplier=1.0, sorter='A'):
     # List all excel files in current folder
     template_name = 'summary_template.xlsx'
     summary_name = 'summary.xlsx'
@@ -94,7 +94,7 @@ def do_a_summary(my_dir, multiplier=1.0):
         return retval
     filtered_list = [filter_part_one(r) for r in summary_list]
     # Create sorted list based on first column
-    sorted_list = sorted(filtered_list, key=lambda r: r['A'])
+    sorted_list = sorted(filtered_list, key=lambda r: r[sorter])
     # Actually write the rows to the openpyxl object
     for summary_row in sorted_list:
         # Create new row in summary file (check for old?)
